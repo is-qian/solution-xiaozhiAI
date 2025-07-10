@@ -206,7 +206,7 @@ class WebSocketClient(object):
                     "format": "opus",
                     "sample_rate": 16000,
                     "channels": 1,
-                    "frame_duration": 20
+                    "frame_duration": 60
                 },
                 "features": {
                     "consistent_sample_rate": True
