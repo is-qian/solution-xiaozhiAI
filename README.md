@@ -21,8 +21,8 @@ QuecPython 推出了小智平台 AI 聊天机器人解决方案。该方案基�
 
 ## 功能特性
 
-- 支持按键语音中断/打断。
-- 支持按键语音唤醒。
+- 支持语音中断/打断。
+- 支持关键词语音唤醒。
 - 使用 Python 语言，便于二次开发。
 
 ## 快速开始
@@ -48,9 +48,8 @@ QuecPython 推出了小智平台 AI 聊天机器人解决方案。该方案基�
 1. **克隆仓库**：
    ```bash
    git clone https://github.com/QuecPython/solution-xiaozhiAI.git
-   cd solution-xiaozhiAI
    ```
-
+   
 3. **烧录固件：**
    按照[说明](https://python.quectel.com/doc/Application_guide/zh/dev-tools/QPYcom/qpycom-dw.html#%E4%B8%8B%E8%BD%BD%E5%9B%BA%E4%BB%B6)将固件烧录到开发板上。
 
@@ -77,11 +76,11 @@ QuecPython 推出了小智平台 AI 聊天机器人解决方案。该方案基�
    - 选择 `_main.py` 脚本。
    - 右键单击并选择 `Run` 或使用`运行`快捷按钮执行脚本。
 
-4. **按下主按键后，即可对话， 参考运行日志：**
+4. **关键词唤醒后，即可对话， 参考运行日志：**
 
    ![](./media/20250425132727.png)
 
-5. 参考宣发视频：`media/example_video.mp4`
+5. 参考使用示例视频：`media/example_video.mp4`
 
 ## 贡献
 
