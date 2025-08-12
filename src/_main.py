@@ -8,9 +8,13 @@ from usr.protocol import WebSocketClient
 from usr.utils import ChargeManager, AudioManager, NetManager, TaskManager
 from usr.threading import Thread, Event, Condition
 from usr.logging import getLogger
+import sys_bus
+# from usr import UI
 
 
 logger = getLogger(__name__)
+
+
 
 class Led(object):
 
@@ -82,6 +86,7 @@ class Application(object):
         self.lte_red_led = Led(23)
         self.lte_green_led = Led(24)
         self.led_power_pin = Pin(Pin.GPIO27, Pin.OUT, Pin.PULL_DISABLE, 0)
+        self.prev_emoj = None
         
         # 初始化充电管理
         self.charge_manager = ChargeManager()
@@ -156,6 +161,8 @@ class Application(object):
                     if self.__voice_activity_event.is_set():
                         # 有人声
                         if not is_listen_flag:
+                            self.audio_manager.stop()
+                            # logger.debug("Clear the audio cache:清除播放缓存{}".format(self.audio_manager.stop()))
                             self.__protocol.listen("start")
                             is_listen_flag = True
                         self.__protocol.send(data)
@@ -182,7 +189,7 @@ class Application(object):
         
     def on_keyword_spotting(self, state):
         logger.info("on_keyword_spotting: {}".format(state))
-        if state == 0:
+        if state[0] == 0:
             # 唤醒词触发
             if self.__working_thread is not None and self.__working_thread.is_running():
                 return
@@ -196,6 +203,7 @@ class Application(object):
         gc.collect()
         logger.info("on_voice_activity_detection: {}".format(state))
         if state == 1:
+            self.audio_manager.stop()
             self.__voice_activity_event.set()  # 有人声
         else:
             self.__voice_activity_event.clear()  # 无人声
@@ -220,11 +228,19 @@ class Application(object):
             pass
         raise NotImplementedError("handle_tts_message not implemented")
 
+#"happy" "cool"  "angry"  "think"
+# ... existing code ...
     def handle_llm_message(data, msg):
         raise NotImplementedError("handle_llm_message not implemented")
-    
+        
     def handle_iot_message(data, msg):
         raise NotImplementedError("handle_iot_message not implemented")
+    
+    def fun():
+        print('### interrupt  {} ###'.format(args)) # args[0]:gpio号 args[1]:上升沿或下降沿
+        
+
+        
 
     def run(self):
         self.charge_manager.enable_charge()

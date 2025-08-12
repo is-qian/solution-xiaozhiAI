@@ -19,7 +19,7 @@ logger = getLogger(__name__)
 
 class AudioManager(object):
 
-    def __init__(self, channel=0, volume=11, pa_number=29):
+    def __init__(self, channel=0, volume=7, pa_number=29):
         self.aud = audio.Audio(channel)  # 初始化音频播放通道
         self.aud.set_pa(pa_number)
         self.aud.setVolume(volume)  # 设置音量
@@ -41,6 +41,9 @@ class AudioManager(object):
 
     def play(self, file):
         self.aud.play(0, 1, file)
+        
+    def stop(self):
+        return self.aud.stopAll()
 
     # ========= opus ====================
 
@@ -85,7 +88,8 @@ class AudioManager(object):
             pass
     
     def start_kws(self):
-        self.rec.ovkws_start("_xiao_zhi_xiao_zhi", 0.7)
+        list = ["_xiao_zhi_xiao_zhi","_xiao_tian_xiao_tian"]
+        self.rec.ovkws_start(list, 0.7)
 
     def stop_kws(self):
         self.rec.ovkws_stop()
