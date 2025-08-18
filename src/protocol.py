@@ -139,7 +139,7 @@ class WebSocketClient(object):
 
         try:
             self.__recv_thread = Thread(target=self.__recv_thread_worker)
-            self.__recv_thread.start(stack_size=16)
+            self.__recv_thread.start(stack_size=64)
         except Exception as e:
             __client__.close()
             logger.error("{} connect failed, Exception details: {}".format(self, repr(e)))

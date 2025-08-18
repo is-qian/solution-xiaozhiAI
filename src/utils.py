@@ -25,6 +25,7 @@ class AudioManager(object):
         self.aud.setVolume(volume)  # 设置音量
         self.aud.setCallback(self.audio_cb)
         self.rec = audio.Record(channel)
+        self.rec.gain_set(4,12)
         self.__skip = 0
 
     # ========== 音频文件 ====================
@@ -43,7 +44,7 @@ class AudioManager(object):
         self.aud.play(0, 1, file)
         
     def stop(self):
-        return self.aud.stopAll()
+        self.aud.stopAll()
 
     # ========= opus ====================
 
@@ -74,6 +75,8 @@ class AudioManager(object):
                 self.__skip += 1
                 return
             return cb(state)
+        self.stop()
+        self.aud.stopPlayStream()
         self.rec.vad_set_callback(wrapper)
 
     def end_cb(self, para):
@@ -88,8 +91,7 @@ class AudioManager(object):
             pass
     
     def start_kws(self):
-        list = ["_xiao_zhi_xiao_zhi","_xiao_tian_xiao_tian"]
-        self.rec.ovkws_start(list, 0.7)
+        self.rec.ovkws_start("_xiao_zhi_xiao_zhi", 0.7)
 
     def stop_kws(self):
         self.rec.ovkws_stop()

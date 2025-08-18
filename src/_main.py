@@ -162,6 +162,7 @@ class Application(object):
                         # 有人声
                         if not is_listen_flag:
                             self.audio_manager.stop()
+                            self.audio_manager.aud.stopPlayStream()
                             # logger.debug("Clear the audio cache:清除播放缓存{}".format(self.audio_manager.stop()))
                             self.__protocol.listen("start")
                             is_listen_flag = True
@@ -189,7 +190,7 @@ class Application(object):
         
     def on_keyword_spotting(self, state):
         logger.info("on_keyword_spotting: {}".format(state))
-        if state[0] == 0:
+        if state == 0:
             # 唤醒词触发
             if self.__working_thread is not None and self.__working_thread.is_running():
                 return
@@ -236,11 +237,6 @@ class Application(object):
     def handle_iot_message(data, msg):
         raise NotImplementedError("handle_iot_message not implemented")
     
-    def fun():
-        print('### interrupt  {} ###'.format(args)) # args[0]:gpio号 args[1]:上升沿或下降沿
-        
-
-        
 
     def run(self):
         self.charge_manager.enable_charge()
