@@ -98,7 +98,7 @@ class WebSocketClient(object):
     def get_mac_address():
         # mac = str(uuid.UUID(int=int(modem.getDevImei())))[-12:]
         # return ":".join([mac[i:i + 2] for i in range(0, 12, 2)])
-        return "64:e8:33:48:ec:c0"
+        return "64:e8:33:48:ec:c2"
 
     @staticmethod
     def generate_uuid() -> str:

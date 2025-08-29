@@ -25,7 +25,7 @@ class AudioManager(object):
         self.aud.setVolume(volume)  # 设置音量
         self.aud.setCallback(self.audio_cb)
         self.rec = audio.Record(channel)
-        self.rec.gain_set(3,10)
+        self.rec.gain_set(4,10)
         self.__skip = 0
 
     # ========== 音频文件 ====================
@@ -71,12 +71,10 @@ class AudioManager(object):
             
     def set_vad_cb(self, cb):
         def wrapper(state):
-            if self.__skip != 2:
-                self.__skip += 1
-                return
+            # if self.__skip != 2:
+            #     self.__skip += 1
+            #     return
             return cb(state)
-        self.stop()
-        self.aud.stopPlayStream()
         self.rec.vad_set_callback(wrapper)
 
     def end_cb(self, para):
