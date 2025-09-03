@@ -4,6 +4,8 @@ from usr import uuid
 import uwebsocket as ws
 from usr.threading import Thread, Condition
 from usr.logging import getLogger
+import sys_bus
+
 
 
 logger = getLogger(__name__)
@@ -69,6 +71,7 @@ class WebSocketClient(object):
         self.__recv_thread = None
         self.__audio_message_handler = None
         self.__json_message_handler = None
+        self.__last_text_value = None
     
     def __str__(self):
         return "{}(host=\"{}\")".format(type(self).__name__, self.host)
@@ -95,7 +98,7 @@ class WebSocketClient(object):
     def get_mac_address():
         # mac = str(uuid.UUID(int=int(modem.getDevImei())))[-12:]
         # return ":".join([mac[i:i + 2] for i in range(0, 12, 2)])
-        return "64:e8:33:48:ec:c0"
+        return "64:e8:33:48:ec:c2"
 
     @staticmethod
     def generate_uuid() -> str:
@@ -184,7 +187,10 @@ class WebSocketClient(object):
             self.__json_message_handler(msg)
         except Exception as e:
             logger.debug("{} handle json message failed, Exception details: {}".format(self, repr(e)))
-
+            
+    # def topic(text_value):
+        
+            
     def send(self, data):
         """send data to server"""
         # logger.debug("send data: ", data)
@@ -193,8 +199,18 @@ class WebSocketClient(object):
     def recv(self):
         """receive data from server, return None or "" means disconnection"""
         data = self.cli.recv()
+        if type(data) == str:
+            data_dict = json.loads(data)
+            text_value = data_dict.get("text")
+            
+            # 对比 text_value 和上次的值是否相同
+            if text_value != self.__last_text_value and text_value is not None:
+                print(text_value)  # 仅在不同时打印
+                self.__last_text_value = text_value  # 更新为最新的 text_value
         # logger.debug("recv data: ", data)
         return data
+
+
 
     def hello(self):
         req = JsonMessage(
@@ -206,7 +222,7 @@ class WebSocketClient(object):
                     "format": "opus",
                     "sample_rate": 16000,
                     "channels": 1,
-                    "frame_duration": 60
+                    "frame_duration": 100
                 },
                 "features": {
                     "consistent_sample_rate": True
@@ -281,3 +297,4 @@ class WebSocketClient(object):
                     }
                 ).to_bytes()
             )
+
