@@ -19,12 +19,13 @@ logger = getLogger(__name__)
 
 class AudioManager(object):
 
-    def __init__(self, channel=0, volume=11, pa_number=29):
+    def __init__(self, channel=0, volume=10, pa_number=29):
         self.aud = audio.Audio(channel)  # 初始化音频播放通道
         self.aud.set_pa(pa_number)
         self.aud.setVolume(volume)  # 设置音量
         self.aud.setCallback(self.audio_cb)
         self.rec = audio.Record(channel)
+        self.rec.gain_set(4,10)
         self.__skip = 0
 
     # ========== 音频文件 ====================
@@ -41,6 +42,9 @@ class AudioManager(object):
 
     def play(self, file):
         self.aud.play(0, 1, file)
+        
+    def stop(self):
+        self.aud.stopAll()
 
     # ========= opus ====================
 
@@ -67,9 +71,9 @@ class AudioManager(object):
             
     def set_vad_cb(self, cb):
         def wrapper(state):
-            if self.__skip != 2:
-                self.__skip += 1
-                return
+            # if self.__skip != 2:
+            #     self.__skip += 1
+            #     return
             return cb(state)
         self.rec.vad_set_callback(wrapper)
 
