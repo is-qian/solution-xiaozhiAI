@@ -12,7 +12,7 @@ logger = getLogger(__name__)
 
 WSS_DEBUG = True
 PROTOCOL_VERSION = "1"
-
+OTA_DOWNLOAD_URL= "http://wechat-mini-static.robomon.cn//OTA/"
 
 class OTAClient(object):
     """OTA客户端 - 获取WebSocket配置"""
@@ -631,14 +631,14 @@ class OTAClient(object):
             logger.info("没有可用的固件更新")
             return False
         logger.info("检测到新固件版本: {}，下载链接: {}".format(
-            self.next_firmware_version, self.next_firmware_url))
+            self.next_firmware_version, OTA_DOWNLOAD_URL + self.next_firmware_version + "/dfota_1.bin"))
         try:
             import fota
             import utime
             
             fota_obj = fota()
             # 由于小智只能下载一个包 所以先暂时放到这里
-            res = fota_obj.httpDownload(url1="https://appstore.seeed-fleet.com/20250819/dfota_1.bin", url2="https://appstore.seeed-fleet.com/20250819/dfota_2.bin")
+            res = fota_obj.httpDownload(url1=OTA_DOWNLOAD_URL + self.next_firmware_version + "/dfota_1.bin", url2=OTA_DOWNLOAD_URL + self.next_firmware_version + "/dfota_2.bin")
             if res != 0:
                 logger.error("固件更新失败，返回码: {}".format(res))
                 return None
