@@ -14,7 +14,7 @@ logger = getLogger(__name__)
 
 WSS_DEBUG = True
 PROTOCOL_VERSION = "1"
-OTA_DOWNLOAD_URL= "http://wechat-mini-static.robomon.cn//OTA/"
+OTA_DOWNLOAD_URL= "http://wechat-mini-static.robomon.cn/OTA/"
 
 class OTAClient(object):
     """OTA客户端 - 获取WebSocket配置"""
@@ -100,7 +100,7 @@ class OTAClient(object):
         # 使用自定义的简单版本号格式
         # 这个版本号应该与OTA服务器上的版本进行比较
         # 格式：主版本号.次版本号.修订号 (例如: 0.0.1, 1.0.0, 2.1.3)
-        custom_version = "0.0.0"
+        custom_version = "0.0.1"
         logger.debug("使用自定义固件版本: {}".format(custom_version))
         return custom_version
     
@@ -838,9 +838,6 @@ class WebSocketClient(object):
         except Exception as e:
             logger.debug("{} handle json message failed, Exception details: {}".format(self, repr(e)))
             
-    # def topic(text_value):
-        
-            
     def send(self, data):
         """send data to server"""
         # logger.debug("send data: ", data)
@@ -849,18 +846,8 @@ class WebSocketClient(object):
     def recv(self):
         """receive data from server, return None or "" means disconnection"""
         data = self.cli.recv()
-        if type(data) == str:
-            data_dict = json.loads(data)
-            text_value = data_dict.get("text")
-            
-            # 对比 text_value 和上次的值是否相同
-            if text_value != self.__last_text_value and text_value is not None:
-                print(text_value)  # 仅在不同时打印
-                self.__last_text_value = text_value  # 更新为最新的 text_value
         # logger.debug("recv data: ", data)
         return data
-
-
 
     def hello(self):
         req = JsonMessage(
@@ -947,4 +934,3 @@ class WebSocketClient(object):
                     }
                 ).to_bytes()
             )
-
